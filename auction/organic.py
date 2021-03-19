@@ -1,6 +1,5 @@
 """Create slots and adjust priorities based on organic listings."""
 import numpy as np
-from params import PR
 
 
 # 21.6 us for (np.arange(100), np.arange(0, 100, 5))
@@ -88,7 +87,7 @@ def nomask_idx(c):
 
 
 # 31us at (1000,20)
-def quality_in_organic(Q, organic_idx, discount=PR.organic_discount):
+def quality_in_organic(Q, organic_idx, discount=1):
     """Adjust expected negative user experience given organic allocation.
     If an item was going to be organically allocated in a position, the negative
         impact of showing it in that position must be zero.

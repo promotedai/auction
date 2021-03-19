@@ -4,6 +4,7 @@ from auction import assign
 
 E = assign._EMPTY
 
+
 class TestAllocate(unittest.TestCase):
 
     def test_solve(self):

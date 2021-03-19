@@ -209,7 +209,6 @@ def fill(winners, alloc_idx, n):
                 if s not in filled:
                     v[vi] = s
                 else:
-
                     while alloc_idx[alc_i] in filled or alloc_idx[alc_i] == -1:
                         alc_i += 1
                     v[vi] = alloc_idx[alc_i]

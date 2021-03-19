@@ -1,10 +1,9 @@
 from auction import bid, comp_bid, organic, multi, assign
 import numpy as np
-from params import PR
 import pandas as pd
 
 
-def bid_tensor(A, Page, organic_idx, Param=PR):
+def bid_tensor(A, Page, organic_idx, Param):
     """Return bid and ENUE (capped quality) for all items in A.
     NOTE: items in A that are neither organically allocated nor bidded can be excluded
         prior to calling this function for efficiency.
@@ -21,7 +20,7 @@ def bid_tensor(A, Page, organic_idx, Param=PR):
             + click for differential performance bidding by positions
             + quality_threshold for quality score to ENUE per position
         organic_idx: int vector of idx of A of organic ranks
-        Param: object for system behavior parameters (defaults to global singleton)
+        Param: object for system behavior parameters
     Returns:
         float tensor (2, |items|, |positions|) of bids and ENUE quality
    """
@@ -83,7 +82,7 @@ def toprank_BQ(BQ, x):
     return toprank_U(BQ[0] + x * BQ[1])
 
 
-def pre_allocate(A, Page, Param=PR):
+def pre_allocate(A, Page, Param):
     """Sub-Workflow for all intermediate variables computed prior to an allocation pattern.
     Values returned exclude items that never pass the reserve bid
     Returns:
@@ -134,7 +133,7 @@ def pre_allocate(A, Page, Param=PR):
 # single allocation: 243ms, 20 positions, 7 alloc, 100,000 items
 # single allocation: 831ms, 100 positions, 7 alloc, 100,000 items
 # Note: after 10k items, will likely need some trimming prior to solving
-def run(A, Page, alloc, Param=PR):
+def run(A, Page, alloc, Param):
     """Allocation workflow. Assign promoted items to an allocation pattern that maximizes value.
     Returns:
         [int] vector of A indices of length up to |Page|; the final allocation
@@ -261,7 +260,6 @@ def move_imp_curve(imp_curve, pos):
     return v
 
 
-# TODO (need to run profiler on same compute instance as all others)
 # Timing: single allocation: 3.426ms, 20 positions, 6 alloc, 1000 items
 def compute_prices(B, U, utility_floor, n, imp_curve, alloc, alloc_idx, winners, filled_winners, owner_ids, reserves):
     """
@@ -288,10 +286,10 @@ def compute_prices(B, U, utility_floor, n, imp_curve, alloc, alloc_idx, winners,
     """
     # COMPUTE PRICES
     result = pd.DataFrame(data={
-        'util': np.zeros(n, dtype=np.float),
-        'altUtil': np.zeros(n, dtype=np.float),
-        'price': np.zeros(n, dtype=np.float),
-        'reserved_price': np.zeros(n, dtype=np.float),
+        'util': np.zeros(n),
+        'altUtil': np.zeros(n),
+        'price': np.zeros(n),
+        'reserved_price': np.zeros(n),
     })
     win_set = set(winners[winners >= 0])
     pos = 0

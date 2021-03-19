@@ -1,5 +1,5 @@
 import numpy as np
-from lambda_io import const as const_bid
+from .const import *
 
 
 # 86 µs for 1000 items at 20 positions
@@ -29,7 +29,7 @@ def make_bids(A, n_pos, click_curve):
     B = np.broadcast_to(A['bid'].to_numpy(), shape=(n_pos, len(A))).transpose().copy()
 
     # CPC: bid per click, depends on position
-    is_cpc = A['bidType'].to_numpy() == const_bid.BidType_CPC
+    is_cpc = A['bidType'].to_numpy() == BidType_CPC
     CPC = np.outer(
         A['pClick'].to_numpy()[is_cpc] * A['bid'].to_numpy()[is_cpc], click_curve)
     B[is_cpc] = CPC
@@ -38,4 +38,4 @@ def make_bids(A, n_pos, click_curve):
 
 def is_promoted(A):
     """Return vector of promoted items from item list dataframe."""
-    return A['bidType'].to_numpy() != const_bid.BidType_NotPromoted
+    return A['bidType'].to_numpy() != BidType_NotPromoted
