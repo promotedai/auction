@@ -3,7 +3,7 @@ import unittest
 from mockgen import unified as mockgen_uni
 import auction
 import page
-import params
+from auction import assign
 from auction import organic, assign
 
 

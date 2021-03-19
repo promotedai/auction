@@ -1,6 +1,6 @@
 import numpy as np
 import unittest
-import auction.comp_bid as comp_bid
+from auction import comp_bid
 
 
 class TestCompBid(unittest.TestCase):

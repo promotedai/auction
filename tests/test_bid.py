@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import unittest
-import auction.bid as bid
+from auction import bid
 
 
 class TestBid(unittest.TestCase):
