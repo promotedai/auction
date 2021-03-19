@@ -1,19 +1,19 @@
 """Given a utility matrix, solve for allocation."""
 import numpy as np
 from scipy.optimize import linear_sum_assignment
-_EMPTY = -1000
+EMPTY = -1000
 
 
 def trim_right_empty(s):
     """Return a view excluding all EMPTY from the right. Assert no EMPTY."""
     i = len(s) - 1
-    while i >= 0 and s[i] == _EMPTY:
+    while i >= 0 and s[i] == EMPTY:
         i -= 1
     ss = s[:i+1]
     if isinstance(ss, np.ndarray):
-        assert np.all(ss != _EMPTY)
+        assert np.all(ss != EMPTY)
     else:
-        assert _EMPTY not in ss
+        assert EMPTY not in ss
     return ss
 
 
@@ -47,7 +47,7 @@ def solve_fill(U, alloc, ins_imp_curve, organic, page_size, utility_floor=0, exc
         organic = np.array(organic)
     assert page_size >= 0
 
-    results = np.repeat(_EMPTY, page_size)
+    results = np.repeat(EMPTY, page_size)
     if exclude is None:
         exclude = set()
     else:
@@ -80,7 +80,7 @@ def _solve_fill(U, alloc, ins_imp_curve, no_promo, organic, utility_floor, resul
         paid_fill = None
         if len(alloc) and alloc[0] == i:
             winner, win_idxs = dequeue(win_idxs)
-            if winner != _EMPTY:
+            if winner != EMPTY:
                 # Check if winner `e` had already been allocated in a higher position.
                 # This can happen from organic back-filling.
                 # This paid winner cannot be allocated again because it was already allocated.
@@ -127,8 +127,8 @@ def solve(U, alloc=None, ins_imp_curve=None, utility_floor=None, exclude=None):
         utility_floor = 0
 
     if U.shape[0] == 0:
-        # no items to assign, return _EMPTY for all columns
-        return np.repeat(_EMPTY, len(alloc))
+        # no items to assign, return EMPTY for all columns
+        return np.repeat(EMPTY, len(alloc))
 
     return _solve(U, alloc, ins_imp_curve, utility_floor, exclude)
 
@@ -143,7 +143,7 @@ def _solve(U, alloc, ins_imp_curve, utility_floor, exclude=None):
         exclude: [bool] vector of indices to never assign a position in allocation
     Returns:
         int vector of winner indices of U in order of `alloc` position index
-            if unallocated, _EMPTY
+            if unallocated, EMPTY
     """
     # select only allocatable positions
     U = U[:, alloc]
@@ -161,8 +161,8 @@ def _solve(U, alloc, ins_imp_curve, utility_floor, exclude=None):
     # solutions with row indices over m are "no allocations"
     n = len(alloc)
     U = np.append(U, np.zeros((n, n)), axis=0)
-    # newly appended rows point to index _EMPTY (not allocated)
-    reverse_map = np.append(reverse_map, np.repeat(_EMPTY, n))
+    # newly appended rows point to index EMPTY (not allocated)
+    reverse_map = np.append(reverse_map, np.repeat(EMPTY, n))
 
     # Run solver
     # 520us for 1000x20
@@ -179,7 +179,7 @@ def fill(winners, alloc_idx, n):
     If missing winners, fill with organically allocated items.
     If an organically allocated item wins a higher slot, fill with organically allocated items.
     The same item should NEVER be allocated more than once!
-    If there are not enough organic items, then fill with _EMPTY.
+    If there are not enough organic items, then fill with EMPTY.
     Args:
         winners: [int] of idx from `solve.` |winners| = num -1 in alloc_idx. -1 is "unfilled."
         alloc_idx: [int] vector of idx of the organic allocation with reserved slots.

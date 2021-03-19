@@ -4,7 +4,7 @@ import unittest
 import auction.bid as bid
 
 
-class TestAuction(unittest.TestCase):
+class TestBid(unittest.TestCase):
 
     def setUp(self):
         self.A = pd.DataFrame({

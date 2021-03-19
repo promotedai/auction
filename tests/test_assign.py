@@ -2,10 +2,10 @@ import unittest
 import numpy as np
 from auction import assign
 
-E = assign._EMPTY
+E = assign.EMPTY
 
 
-class TestAllocate(unittest.TestCase):
+class TestAssign(unittest.TestCase):
 
     def test_solve(self):
         # position 2 cannot be allocated
@@ -182,7 +182,7 @@ class TestUtil(unittest.TestCase):
         self.assertListEqual(s, [0, 0, 3])
 
     def test_trim_right_empty(self):
-        E = assign._EMPTY
+        E = assign.EMPTY
         s = assign.trim_right_empty([0, 1, 2, 3])
         self.assertListEqual(s, [0, 1, 2, 3])
         s = assign.trim_right_empty([0, 1, 2, E])

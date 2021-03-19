@@ -40,9 +40,9 @@ class TestOrganic(unittest.TestCase):
         self.assertListEqual([0, 1, 0, 2, 3, 1, 2, 0, 0, 0, 0], list(p2))
 
     def test_bid_in_organic(self):
-        B = np.arange(100, dtype=np.float).reshape((10, 10)) + 1.
+        B = np.arange(100, dtype=float).reshape((10, 10)) + 1.
         organic_idx = np.ma.array(
-            [3, -1, 4, 9, -1, 0, -1, -1, -1, 1], mask=[0,1,0,0,1,0,1,1,1,0], dtype=np.int)
+            [3, -1, 4, 9, -1, 0, -1, -1, -1, 1], mask=[0,1,0,0,1,0,1,1,1,0], dtype=int)
         ins_to_imp_curve = np.array([1, 0.75, 0.5, 0.4, 0.3, 0.2, 0.1, 0.1, 0.1, 0.05])
         B2 = organic.bid_in_organic(B, organic_idx, ins_to_imp_curve)
         # bid is zero for winner.
@@ -63,7 +63,7 @@ class TestOrganic(unittest.TestCase):
         self.assertListEqual(list(v * B[i]), list(B2[i]))
 
     def test_quality_in_organic(self):
-        Q = np.arange(100, dtype=np.float).reshape((10, 10)) - 100
+        Q = np.arange(100, dtype=float).reshape((10, 10)) - 100
         organic_idx = np.array([0, 3, 2, 1, 5])  # note, not all 10 positions allocated
         Q2 = organic.quality_in_organic(Q, organic_idx)
         # first allocated is all zero
