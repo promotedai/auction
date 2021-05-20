@@ -1,0 +1,34 @@
+on: [push, workflow_dispatch]
+name: Run Tests and Benchmarks
+
+jobs:
+  test:
+    name: Run unit tests and benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install pipenv
+        run: |
+          pip install --upgrade pip
+          pip install pipenv
+
+      - id: cache-pipenv
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        run: |
+          git config --global url."https://prm_deployer:${{ secrets.PRM_DEPLOYER_GITHUB_ACTIONS }}@github".insteadOf https://github
+          pipenv install --deploy --dev
+
+      - name: unittest
+        shell: bash
+        run: |
+          pipenv run python3 -m unittest
